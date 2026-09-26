@@ -1,0 +1,6 @@
+@TheBabyCowboy.HomeApi_HostAddress = http://localhost:5225
+
+GET {{TheBabyCowboy.HomeApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

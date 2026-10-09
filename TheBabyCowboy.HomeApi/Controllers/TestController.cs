@@ -11,7 +11,7 @@ namespace TheBabyCowboy.HomeApi.Controllers
         {
             return new OkObjectResult(new
             {
-                message = "Test endpoint is working!"
+                message = "Test endpoint is working (once again edited for pipeline auto run test)!"
             });
         }
     }

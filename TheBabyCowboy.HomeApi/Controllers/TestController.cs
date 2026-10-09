@@ -4,7 +4,9 @@ using TheBabyCowboy.HomeApi.Data;
 
 namespace TheBabyCowboy.HomeApi.Controllers
 {
-    public class TestController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TestController : ControllerBase
     {
         [HttpGet]
         public IActionResult Get()

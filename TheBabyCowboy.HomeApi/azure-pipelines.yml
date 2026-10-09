@@ -11,6 +11,7 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
+# STAGE 1: Provision Infrastructure using Bicep via Azure CLI
 - stage: Infra
   displayName: '1. Provision Infrastructure in India'
   jobs:
@@ -18,17 +19,23 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
-    - task: AzureResourceManagerTemplateDeployment@3
+    - task: AzureCLI@2
       displayName: 'Provision Free Windows App Service (Central India)'
       inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: '$(azureSubscription)'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(resourceGroup)'
-        location: '$(location)'
-        templateLocation: 'Linked artifact'
-        csmFile: '$(System.DefaultWorkingDirectory)/TheBabyCowboy.HomeApi/Infra/main.bicep'
-        deploymentMode: 'Incremental'
+        azureSubscription: '$(azureSubscription)'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          Write-Host "Current Directory:"
+          Get-Location
+          
+          Write-Host "Checking Bicep file presence:"
+          Get-ChildItem -Path . -Recurse -Filter "main.bicep" | Select-Object FullName
+          
+          # Deploy Bicep resource group deployment
+          az deployment group create `
+            --resource-group "$(resourceGroup)" `
+            --template-file "./TheBabyCowboy.HomeApi/Infra/main.bicep"
 
 - stage: Build
   displayName: '2. Build & Package API'

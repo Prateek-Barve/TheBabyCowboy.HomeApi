@@ -27,7 +27,7 @@ stages:
         resourceGroupName: '$(resourceGroup)'
         location: '$(location)'
         templateLocation: 'Linked artifact'
-        csmFile: 'TheBabyCowboy.HomeApi/Infra/main.bicep'
+        csmFile: '**/Infra/main.bicep'
         deploymentMode: 'Incremental'
 
 - stage: Build

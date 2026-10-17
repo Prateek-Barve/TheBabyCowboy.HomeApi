@@ -33,7 +33,8 @@ public class ThoughtsController : ControllerBase
         var response = new ThoughtResponseDto
         {
             Id = thought.Id,
-            Text = thought.Text
+            Text = thought.Text,
+            SaidBy = thought.SaidBy
         };
 
         return Ok(response);

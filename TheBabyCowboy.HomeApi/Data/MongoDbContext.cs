@@ -20,9 +20,6 @@ public class MongoDbContext
         Database = client.GetDatabase(settings.DatabaseName);
     }
 
-    public IMongoCollection<Thought> Thoughts =>
-        Database.GetCollection<Thought>("thoughts");
-
     public IMongoCollection<Reflection> Reflections =>
         Database.GetCollection<Reflection>("reflections");
 }

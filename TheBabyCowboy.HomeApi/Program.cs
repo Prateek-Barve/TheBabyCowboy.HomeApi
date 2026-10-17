@@ -18,7 +18,18 @@ builder.Services.AddSwaggerGen();
 //{
 //    client.BaseAddress = new Uri("http://localhost:11434");
 //});
+var cosmosDbSettings =
+    builder.Configuration.GetSection("CosmosDb").Get<CosmosDbSettings>()
+    ?? throw new InvalidOperationException(
+        "Cosmos DB configuration is missing.");
 
+if (string.IsNullOrWhiteSpace(cosmosDbSettings.ConnectionString) ||
+    string.IsNullOrWhiteSpace(cosmosDbSettings.DatabaseName) ||
+    string.IsNullOrWhiteSpace(cosmosDbSettings.ContainerName))
+{
+    throw new InvalidOperationException(
+        "Cosmos DB connection string, database name, and container name must be configured.");
+}
 
 var mongoDbSettings =
     builder.Configuration
@@ -38,6 +49,13 @@ var geminiSettings =
 
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddSingleton(geminiSettings);
+builder.Services.AddSingleton(cosmosDbSettings);
+
+builder.Services.AddSingleton(sp =>
+    new Microsoft.Azure.Cosmos.CosmosClient(
+        sp.GetRequiredService<CosmosDbSettings>().ConnectionString));
+
+builder.Services.AddSingleton<CosmosDbContext>();
 
 builder.Services.AddSingleton<MongoDbContext>();
 
